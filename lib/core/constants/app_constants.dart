@@ -16,7 +16,7 @@ class AppConstants {
   // ============== API CONFIGURATION ==============
   /// Base URL for API calls
   /// Change this based on your environment (dev, staging, prod)
-  static const String baseUrl = 'https://api.yourapp.com/v1';
+  static const String baseUrl = 'http://localhost:5000';
   
   /// Request timeout duration
   static const Duration connectionTimeout = Duration(seconds: 30);

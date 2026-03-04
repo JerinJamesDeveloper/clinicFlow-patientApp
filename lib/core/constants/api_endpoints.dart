@@ -10,12 +10,12 @@ class ApiEndpoints {
   // Prevent instantiation
   ApiEndpoints._();
 
-  static const String baseurl = AppConstants.baseUrl;
+  static const String baseUrl = AppConstants.baseUrl;
   // ============== AUTH ENDPOINTS ==============
-  static const String _authBase = '$baseurl/api';
+  static const String _authBase = '$baseUrl/api';
 
   static const String login = '$_authBase/login';
-  static const String register = '$_authBase/signup';
+  static const String register = '$_authBase/register';
   static const String logout = '$_authBase/logout';
   static const String refreshToken = '$_authBase/refresh-token';
   static const String forgotPassword = '$_authBase/forgot-password';
@@ -25,20 +25,21 @@ class ApiEndpoints {
   static const String verifyOtp = '$_authBase/verify-otp';
   static const String resendOtp = '$_authBase/resend-otp';
   static const String changePassword = '$_authBase/change-password';
+  static const String authMe = '$_authBase/me';
 
   // ============== USER ENDPOINTS ==============
-  static const String _userBase = '$baseurl/users';
+  static const String _userBase = '$baseUrl/users';
 
-  static const String currentUser = '$_userBase/me';
-  static const String updateProfile = '$_userBase/me';
+  static const String userMe = '$_userBase/me';
+  static const String updateProfile = userMe;
   static const String uploadAvatar = '$_userBase/me/avatar';
-  static const String deleteAccount = '$_userBase/me';
+  static const String deleteAccount = userMe;
 
-  /// Get user by ID
-  static String userById(String id) => '$_userBase/$id';
+  /// Get user by username
+  static String userByUsername(String username) => '$_userBase/$username';
 
   // ============== ADMIN ENDPOINTS ==============
-  static const String _adminBase = '$baseurl/admin';
+  static const String _adminBase = '$baseUrl/admin';
 
   static const String adminUsers = '$_adminBase/users';
   static const String adminDashboard = '$_adminBase/dashboard';
@@ -50,14 +51,8 @@ class ApiEndpoints {
   /// Admin update user role
   static String adminUpdateUserRole(String id) => '$_adminBase/users/$id/role';
 
-  // ============== PROFILE ENDPOINTS ==============
-  static const String _profileBase = '$baseurl/profile';
-
-  static const String getProfile = _profileBase;
-  static const String updateProfileDetails = _profileBase;
-
   // ============== NOTIFICATION ENDPOINTS ==============
-  static final String _notificationBase = '$baseurl/notifications';
+  static final String _notificationBase = '$baseUrl/notifications';
 
   static String get notifications => _notificationBase;
   static String get notificationUnreadCount => '$_notificationBase/unread-count';

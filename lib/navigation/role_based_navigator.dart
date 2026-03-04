@@ -104,13 +104,13 @@ class RoleBasedNavigator {
       activeIcon: Icons.home,
       label: 'Home',
     ),
-    NavItem(
-      route: '/notifications',
-      icon: Icons.notifications_outlined,
-      activeIcon: Icons.notifications,
-      label: 'Notifications',
-      requiredPermission: Permissions.viewNotifications,
-    ),
+    // NavItem(
+    //   route: '/notifications',
+    //   icon: Icons.notifications_outlined,
+    //   activeIcon: Icons.notifications,
+    //   label: 'Notifications',
+    //   requiredPermission: Permissions.viewNotifications,
+    // ),
     NavItem(
       route: '/profile',
       icon: Icons.person_outlined,

@@ -39,7 +39,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<UserModel> getProfile() async {
     try {
-      final response = await _dioClient.get(ApiEndpoints.getProfile);
+      final response = await _dioClient.get(ApiEndpoints.userMe);
       
       final data = response.data as Map<String, dynamic>;
       final userData = data['data'] as Map<String, dynamic>? ?? 

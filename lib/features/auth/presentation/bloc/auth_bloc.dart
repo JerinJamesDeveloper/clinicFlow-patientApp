@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/errors/failures.dart';
+import '../../../../core/usecases/usecase.dart';
 import '../../domain/usecases/change_password_usecase.dart';
 import '../../domain/usecases/forgot_password_usecase.dart';
 import '../../domain/usecases/get_current_user_usecase.dart';
@@ -18,6 +19,7 @@ import '../../domain/usecases/register_usecase.dart';
 import '../../domain/usecases/reset_password_usecase.dart';
 import '../../domain/usecases/verify_otp_usecase.dart';
 import '../../domain/usecases/resend_otp_usecase.dart';
+import '../../domain/usecases/resend_verification_email_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
@@ -32,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final ChangePasswordUseCase _changePasswordUseCase;
   final VerifyOtpUseCase _verifyOtpUseCase;
   final ResendOtpUseCase _resendOtpUseCase;
+  final ResendVerificationEmailUseCase _resendVerificationEmailUseCase;
 
   AuthBloc({
     required LoginUseCase loginUseCase,
@@ -43,6 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required ChangePasswordUseCase changePasswordUseCase,
     required VerifyOtpUseCase verifyOtpUseCase,
     required ResendOtpUseCase resendOtpUseCase,
+    required ResendVerificationEmailUseCase resendVerificationEmailUseCase,
   }) : _loginUseCase = loginUseCase,
        _registerUseCase = registerUseCase,
        _logoutUseCase = logoutUseCase,
@@ -52,6 +56,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
        _changePasswordUseCase = changePasswordUseCase,
        _verifyOtpUseCase = verifyOtpUseCase,
        _resendOtpUseCase = resendOtpUseCase,
+       _resendVerificationEmailUseCase = resendVerificationEmailUseCase,
        super(const AuthInitial()) {
     // Register event handlers
     on<AuthCheckRequested>(_onAuthCheckRequested);
@@ -65,6 +70,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthErrorCleared>(_onErrorCleared);
     on<AuthVerifyOtpRequested>(_onVerifyOtpRequested);
     on<AuthResendOtpRequested>(_onResendOtpRequested);
+    on<AuthResendVerificationRequested>(_onResendVerificationRequested);
   }
 
   /// Handles checking current auth status
@@ -274,6 +280,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         AuthError(message: failure.message, previousState: currentState),
       ),
       (_) => emit(const AuthResendOtpSuccess()),
+    );
+  }
+
+  Future<void> _onResendVerificationRequested(
+    AuthResendVerificationRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final currentState = state;
+    emit(
+      const AuthOperationInProgress(operation: AuthOperation.resendVerification),
+    );
+
+    final result = await _resendVerificationEmailUseCase(const NoParams());
+
+    result.fold(
+      (failure) => emit(
+        AuthError(message: failure.message, previousState: currentState),
+      ),
+      (_) => emit(const AuthVerificationEmailSent()),
     );
   }
 

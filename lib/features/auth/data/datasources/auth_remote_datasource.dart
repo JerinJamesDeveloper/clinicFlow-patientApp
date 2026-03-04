@@ -144,7 +144,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> getCurrentUser() async {
     try {
-      final response = await _dioClient.get(ApiEndpoints.currentUser);
+      final response = await _dioClient.get(ApiEndpoints.authMe);
 
       final data = response.data as Map<String, dynamic>;
 
@@ -170,7 +170,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: {'refresh_token': refreshToken},
       );
 
-      return AuthTokensModel.fromJson(response.data as Map<String, dynamic>);
+      final data = response.data as Map<String, dynamic>;
+      final tokenData = data['tokens'] as Map<String, dynamic>? ?? data;
+
+      return AuthTokensModel.fromJson(tokenData);
     } on UnauthorizedException {
       throw const SessionExpiredException();
     } on ServerException {

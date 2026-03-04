@@ -28,6 +28,7 @@ import '../../features/auth/domain/usecases/register_usecase.dart';
 import '../../features/auth/domain/usecases/reset_password_usecase.dart';
 import '../../features/auth/domain/usecases/verify_otp_usecase.dart';
 import '../../features/auth/domain/usecases/resend_otp_usecase.dart';
+import '../../features/auth/domain/usecases/resend_verification_email_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 
 // Profile Feature
@@ -106,6 +107,7 @@ void _initAuthFeature() {
       changePasswordUseCase: sl(),
       verifyOtpUseCase: sl(),
       resendOtpUseCase: sl(),
+      resendVerificationEmailUseCase: sl(),
     ),
   );
 
@@ -139,6 +141,9 @@ void _initAuthFeature() {
   sl.registerLazySingleton<VerifyOtpUseCase>(() => VerifyOtpUseCase(sl()));
 
   sl.registerLazySingleton<ResendOtpUseCase>(() => ResendOtpUseCase(sl()));
+  sl.registerLazySingleton<ResendVerificationEmailUseCase>(
+    () => ResendVerificationEmailUseCase(sl()),
+  );
 
   // ========== Repository ==========
   sl.registerLazySingleton<AuthRepository>(
