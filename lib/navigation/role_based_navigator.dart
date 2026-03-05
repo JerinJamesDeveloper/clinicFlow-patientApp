@@ -118,6 +118,12 @@ class RoleBasedNavigator {
       label: 'Profile',
       requiredPermission: Permissions.viewProfile,
     ),
+    NavItem(
+      route: '/appointments',
+      icon: Icons.calendar_today_outlined,
+      activeIcon: Icons.calendar_today,
+      label: 'Appointments',
+    ),
   ];
 
   /// Bottom navigation items for admin users
@@ -278,6 +284,7 @@ class RoleBasedNavigator {
       '/settings',
       '/settings/change-password',
       '/notifications',
+      '/appointments',
     ];
 
     if (publicRoutes.contains(route)) {

@@ -36,6 +36,9 @@ class RoutePaths {
   static const String notFound = '/404';
   static const String accessDenied = '/access-denied';
   static const String error = '/error';
+  // ============== APPOINTMENTS ==============
+  static const String appointments = '/appointments';
+  static const String appointmentsDetail = '/appointments/:appointmentsId';
 }
 
 /// Route name constants (for named navigation)
@@ -70,4 +73,7 @@ class RouteNames {
   static const String notFound = 'notFound';
   static const String accessDenied = 'accessDenied';
   static const String error = 'error';
+  // Appointments
+  static const String appointments = 'appointments';
+  static const String appointmentsDetail = 'appointmentsDetail';
 }

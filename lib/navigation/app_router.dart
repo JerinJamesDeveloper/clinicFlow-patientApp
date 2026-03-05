@@ -20,6 +20,8 @@ import '../features/notifications/presentation/presentation.dart';
 import 'role_based_navigator.dart';
 import 'route_guards.dart';
 import 'route_names.dart';
+import 'package:patient_app/features/appointments/presentation/pages/appointments_page.dart';
+import 'package:patient_app/features/appointments/presentation/pages/appointments_detail_page.dart';
 
 /// Global navigator key
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -140,6 +142,24 @@ class AppRouter {
                   name: RouteNames.changePassword,
                   builder: (context, state) =>
                       _buildPlaceholderPage('Change Password', Icons.lock),
+                ),
+              ],
+            ),
+            // Appointments
+            GoRoute(
+              path: RoutePaths.appointments,
+              name: RouteNames.appointments,
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: const AppointmentsPage(),
+              ),
+              routes: [
+                GoRoute(
+                  path: ':appointmentsId',
+                  name: RouteNames.appointmentsDetail,
+                  builder: (context, state) {
+                    final appointmentsId = state.pathParameters['appointmentsId'] ?? '';
+                    return AppointmentsDetailPage(id: appointmentsId);
+                  },
                 ),
               ],
             ),

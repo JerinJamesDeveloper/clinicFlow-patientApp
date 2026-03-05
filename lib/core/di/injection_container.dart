@@ -38,6 +38,30 @@ import '../../features/profile/domain/repositories/profile_repository.dart';
 import '../../features/profile/domain/usecases/get_profile_usecase.dart';
 import '../../features/profile/domain/usecases/update_profile_usecase.dart';
 import '../../features/profile/presentation/bloc/profile_bloc.dart';
+// Appointments Feature
+import '../../features/appointments/data/datasources/appointments_local_datasource.dart';
+import '../../features/appointments/data/datasources/appointments_remote_datasource.dart';
+import '../../features/appointments/data/repositories/appointments_repository_impl.dart';
+import '../../features/appointments/domain/repositories/appointments_repository.dart';
+import '../../features/appointments/domain/usecases/create_appointments_usecase.dart';
+import '../../features/appointments/domain/usecases/delete_appointments_usecase.dart';
+import '../../features/appointments/domain/usecases/get_appointments_usecase.dart';
+import '../../features/appointments/domain/usecases/get_all_appointmentss_usecase.dart';
+import '../../features/appointments/domain/usecases/update_appointments_usecase.dart';
+import '../../features/appointments/presentation/bloc/appointments_bloc.dart';
+import '../../features/appointments/domain/usecases/get_doctors_usecase.dart';
+import '../../features/appointments/domain/usecases/get_doctor_detail_usecase.dart';
+import '../../features/appointments/domain/usecases/get_departments_usecase.dart';
+import '../../features/appointments/domain/usecases/get_hospital_branches_usecase.dart';
+import '../../features/appointments/domain/usecases/get_doctor_schedule_usecase.dart';
+import '../../features/appointments/domain/usecases/get_queue_status_usecase.dart';
+import '../../features/appointments/domain/usecases/get_upcoming_appointments_usecase.dart';
+import '../../features/appointments/domain/usecases/get_past_appointments_usecase.dart';
+import '../../features/appointments/domain/usecases/get_appointment_detail_usecase.dart';
+import '../../features/appointments/domain/usecases/create_appointment_usecase.dart';
+import '../../features/appointments/domain/usecases/cancel_appointment_usecase.dart';
+import '../../features/appointments/domain/usecases/reschedule_appointment_usecase.dart';
+
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -62,6 +86,8 @@ Future<void> initDependencies() async {
   // ==================== FEATURES ====================
   _initAuthFeature();
   _initProfileFeature();
+
+  _initAppointmentsFeature();
 }
 
 /// Initialize external dependencies
@@ -255,3 +281,120 @@ mixin ServiceLocatorMixin {
 }
 
 // ==================== END OF FEATURE ====================
+
+
+/// Initialize Appointments feature
+void _initAppointmentsFeature() {
+  // ========== BLoC ==========
+  sl.registerFactory<AppointmentsBloc>(
+    () => AppointmentsBloc(
+      rescheduleAppointmentUseCase: sl(),
+      cancelAppointmentUseCase: sl(),
+      createAppointmentUseCase: sl(),
+      getAppointmentDetailUseCase: sl(),
+      getPastAppointmentsUseCase: sl(),
+      getUpcomingAppointmentsUseCase: sl(),
+      getQueueStatusUseCase: sl(),
+      getDoctorScheduleUseCase: sl(),
+      getHospitalBranchesUseCase: sl(),
+      getDepartmentsUseCase: sl(),
+      getDoctorDetailUseCase: sl(),
+      getDoctorsUseCase: sl(),
+      getAppointmentsUseCase: sl(),
+      getAllAppointmentssUseCase: sl(),
+      createAppointmentsUseCase: sl(),
+      updateAppointmentsUseCase: sl(),
+      deleteAppointmentsUseCase: sl(),
+    ),
+  );
+
+  // ========== Use Cases ==========
+  sl.registerLazySingleton<RescheduleAppointmentUseCase>(
+    () => RescheduleAppointmentUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<CancelAppointmentUseCase>(
+    () => CancelAppointmentUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<CreateAppointmentUseCase>(
+    () => CreateAppointmentUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetAppointmentDetailUseCase>(
+    () => GetAppointmentDetailUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetPastAppointmentsUseCase>(
+    () => GetPastAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetUpcomingAppointmentsUseCase>(
+    () => GetUpcomingAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetQueueStatusUseCase>(
+    () => GetQueueStatusUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetDoctorScheduleUseCase>(
+    () => GetDoctorScheduleUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetHospitalBranchesUseCase>(
+    () => GetHospitalBranchesUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetDepartmentsUseCase>(
+    () => GetDepartmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetDoctorDetailUseCase>(
+    () => GetDoctorDetailUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetDoctorsUseCase>(
+    () => GetDoctorsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetAppointmentsUseCase>(
+    () => GetAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetAllAppointmentssUseCase>(
+    () => GetAllAppointmentssUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<CreateAppointmentsUseCase>(
+    () => CreateAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<UpdateAppointmentsUseCase>(
+    () => UpdateAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<DeleteAppointmentsUseCase>(
+    () => DeleteAppointmentsUseCase(sl()),
+  );
+
+  // ========== Repository ==========
+  sl.registerLazySingleton<AppointmentsRepository>(
+    () => AppointmentsRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // ========== Data Sources ==========
+  sl.registerLazySingleton<AppointmentsRemoteDataSource>(
+    () => AppointmentsRemoteDataSourceImpl(sl()),
+  );
+
+  sl.registerLazySingleton<AppointmentsLocalDataSource>(
+    () => AppointmentsLocalDataSourceImpl(sl()),
+  );
+}
+
+// ==================== END OF Appointments FEATURE ====================
+

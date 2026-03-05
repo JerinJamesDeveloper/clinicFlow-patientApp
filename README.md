@@ -1,16 +1,58 @@
 # patient_app
 
-A new Flutter project.
+Patient Flutter app generated and maintained with Embit CLI.
 
-## Getting Started
+## Appointments Feature Status
 
-This project is a starting point for a Flutter application.
+Appointments page and feature scaffolding are completed via CLI generation.
 
-A few resources to get you started if this is your first Flutter project:
+### Feature command used
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+embit feature -n appointments --nav-bar --icon Icons.calendar_today_outlined --label "Appointments"
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Models generated (from `creator.md`)
+
+```bash
+embit model -f appointments -n appointment --string patientId --string doctorId --string departmentId --string branchId --string familyMemberId --string appointmentDate --string slotStartTime --string slotEndTime --string bookingSource --string appointmentType --string visitReason --string chiefComplaint --string priority --string status --string cancellationReason --string cancelledBy --int tokenNumber --with-state
+embit model -f appointments -n doctor --string firstName --string lastName --string salutation --string genderCode --string specialization --string subSpecialization --string qualifications --string profilePhotoUrl --string mciRegistrationNumber --int experienceYears --double consultationFee --double followUpFee --bool isAvailableOnline --int maxPatientsPerDay --int avgConsultationMin
+embit model -f appointments -n department --string name --string code --string description
+embit model -f appointments -n hospital_branch --string branchName --string branchCode --string addressLine1 --string city --string state --string pincode --string phone --string email --double latitude --double longitude
+embit model -f appointments -n doctor_schedule --string doctorId --string branchId --string slotStartTime --string slotEndTime --string effectiveFrom --string effectiveUntil --int dayOfWeek --int maxTokens --bool isActive
+embit model -f appointments -n queue_status --string doctorId --string queueDate --string status --int currentToken --int totalTokensIssued --int avgWaitMinutes --with-state
+```
+
+### Usecases generated (from `creator.md`)
+
+```bash
+embit usecase -f appointments -n get_doctors -t get-list --with-event
+embit usecase -f appointments -n get_doctor_detail -t get --string doctorId --with-event
+embit usecase -f appointments -n get_departments -t get-list --with-event
+embit usecase -f appointments -n get_hospital_branches -t get-list --with-event
+embit usecase -f appointments -n get_doctor_schedule -t get-list --string doctorId --with-event
+embit usecase -f appointments -n get_queue_status -t get --string doctorId --with-event
+embit usecase -f appointments -n get_upcoming_appointments -t get-list --with-event
+embit usecase -f appointments -n get_past_appointments -t get-list --with-event
+embit usecase -f appointments -n get_appointment_detail -t get --string appointmentId --with-event
+embit usecase -f appointments -n create_appointment -t create --with-event
+embit usecase -f appointments -n cancel_appointment -t delete --string appointmentId --with-event
+embit usecase -f appointments -n reschedule_appointment -t update --string appointmentId --with-event
+```
+
+### Routing and navigation
+
+- Route path added: `/appointments`
+- Detail path added: `/appointments/:appointmentsId`
+- Appointments tab added to role-based navigation
+
+### Verification run
+
+```bash
+flutter pub get
+flutter analyze
+```
+
+Current analyzer status after appointments integration:
+- Appointments generation errors are resolved.
+- One unrelated existing project error remains in `test/widget_test.dart` (`App` type reference).

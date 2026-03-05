@@ -55,18 +55,29 @@ class ApiEndpoints {
   static final String _notificationBase = '$baseUrl/notifications';
 
   static String get notifications => _notificationBase;
-  static String get notificationUnreadCount => '$_notificationBase/unread-count';
+  static String get notificationUnreadCount =>
+      '$_notificationBase/unread-count';
   static String get notificationReadAll => '$_notificationBase/read-all';
   static String get notificationSeenAll => '$_notificationBase/seen-all';
-  static String get notificationDeviceToken => '$_notificationBase/device-token';
+  static String get notificationDeviceToken =>
+      '$_notificationBase/device-token';
 
   /// Get notification by ID
   static String notificationById(String id) => '$_notificationBase/$id';
 
   /// Mark notification as read
-  static String notificationMarkRead(String id) => '$_notificationBase/$id/read';
+  static String notificationMarkRead(String id) =>
+      '$_notificationBase/$id/read';
 
   // ============== COMMON ==============
   static const String health = '/health';
   static const String version = '/version';
+  // ================= Appointments ============================
+  static const String appointmentsBase = '$baseUrl/appointmentss';
+  static const String appointmentss = appointmentsBase;
+  static const String getappointmentss = '$appointmentsBase/get';
+  static const String getallappointmentss = '$appointmentsBase/getall';
+  static const String createappointmentss = '$appointmentsBase/create';
+  static const String deleteappointmentss = '$appointmentsBase/delete';
+  static const String updateappointmentss = '$appointmentsBase/update';
 }
