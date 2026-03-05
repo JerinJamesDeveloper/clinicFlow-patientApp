@@ -8,25 +8,41 @@ import '../../domain/entities/home_entity.dart';
 
 /// Home data model with JSON serialization
 class HomeModel extends HomeEntity {
-  const HomeModel({
-    required super.id,
-    required super.name,
-    super.description,
-    super.isActive = true,
-    required super.createdAt,
-    super.updatedAt,
-  });
+  HomeModel({
+    required String name,
+    String? id,
+    String? description,
+    bool isActive = true,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) : super(
+          id: id ?? _generateId(name: name, description: description),
+          name: name,
+          description: description,
+          isActive: isActive,
+          createdAt: createdAt ?? DateTime.now(),
+          updatedAt: updatedAt,
+        );
 
   /// Creates a HomeModel from JSON map
   factory HomeModel.fromJson(Map<String, dynamic> json) {
+    final parsedName = (json['name'] ?? json['title'])?.toString() ?? '';
+    final parsedDescription =
+        (json['description'] ?? json['subtitle'] ?? json['summary'])
+            ?.toString();
+
     return HomeModel(
-      id: json['id']?.toString() ?? '',
-      name: json['name'] as String? ?? '',
-      description: json['description'] as String?,
-      isActive: json['is_active'] as bool? ?? 
-                json['isActive'] as bool? ?? true,
-      createdAt: _parseDateTime(json['created_at'] ?? json['createdAt']) ?? 
-                 DateTime.now(),
+      id: (json['id'] ??
+              json['home_id'] ??
+              json['homeId'] ??
+              json['item_id'])
+          ?.toString(),
+      name: parsedName,
+      description: parsedDescription,
+      isActive: _parseBool(json['is_active'] ?? json['isActive']) ?? true,
+      createdAt: _parseDateTime(
+        json['created_at'] ?? json['createdAt'] ?? json['timestamp'],
+      ),
       updatedAt: _parseDateTime(json['updated_at'] ?? json['updatedAt']),
     );
   }
@@ -70,9 +86,7 @@ class HomeModel extends HomeEntity {
   /// Creates an empty HomeModel
   factory HomeModel.empty() {
     return HomeModel(
-      id: '',
       name: '',
-      createdAt: DateTime.now(),
     );
   }
 
@@ -107,5 +121,31 @@ class HomeModel extends HomeEntity {
       return DateTime.fromMillisecondsSinceEpoch(value);
     }
     return null;
+  }
+
+  static bool? _parseBool(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    if (value is int) return value == 1;
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      if (normalized == 'true' || normalized == '1') return true;
+      if (normalized == 'false' || normalized == '0') return false;
+    }
+    return null;
+  }
+
+  static String _generateId({
+    required String name,
+    String? description,
+  }) {
+    final seed = '${name.trim()}|${description?.trim() ?? ''}';
+    if (seed == '|') return 'home_local';
+
+    var hash = 0;
+    for (final unit in seed.codeUnits) {
+      hash = ((hash * 31) + unit) & 0x7fffffff;
+    }
+    return 'home_$hash';
   }
 }
