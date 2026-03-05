@@ -16,6 +16,7 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
 import '../features/auth/presentation/pages/otp_verification_page.dart';
 import '../features/auth/presentation/pages/splash_page.dart';
+import '../features/home/presentation/pages/home_page.dart';
 import '../features/notifications/presentation/presentation.dart';
 import 'role_based_navigator.dart';
 import 'route_guards.dart';
@@ -100,10 +101,8 @@ class AppRouter {
             GoRoute(
               path: RoutePaths.home,
               name: RouteNames.home,
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: _buildPlaceholderPage('Home', Icons.home),
-                // child: const UserHomePage(),
-              ),
+              pageBuilder: (context, state) =>
+                  NoTransitionPage(child: const HomePage()),
             ),
             // // Notifications
             // GoRoute(
@@ -149,15 +148,15 @@ class AppRouter {
             GoRoute(
               path: RoutePaths.appointments,
               name: RouteNames.appointments,
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: const AppointmentsPage(),
-              ),
+              pageBuilder: (context, state) =>
+                  NoTransitionPage(child: const AppointmentsPage()),
               routes: [
                 GoRoute(
                   path: ':appointmentsId',
                   name: RouteNames.appointmentsDetail,
                   builder: (context, state) {
-                    final appointmentsId = state.pathParameters['appointmentsId'] ?? '';
+                    final appointmentsId =
+                        state.pathParameters['appointmentsId'] ?? '';
                     return AppointmentsDetailPage(id: appointmentsId);
                   },
                 ),

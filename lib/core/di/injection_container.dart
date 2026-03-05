@@ -61,7 +61,21 @@ import '../../features/appointments/domain/usecases/get_appointment_detail_useca
 import '../../features/appointments/domain/usecases/create_appointment_usecase.dart';
 import '../../features/appointments/domain/usecases/cancel_appointment_usecase.dart';
 import '../../features/appointments/domain/usecases/reschedule_appointment_usecase.dart';
-
+// Home Feature
+import '../../features/home/data/datasources/home_local_datasource.dart';
+import '../../features/home/data/datasources/home_remote_datasource.dart';
+import '../../features/home/data/repositories/home_repository_impl.dart';
+import '../../features/home/domain/repositories/home_repository.dart';
+import '../../features/home/domain/usecases/create_home_usecase.dart';
+import '../../features/home/domain/usecases/delete_home_usecase.dart';
+import '../../features/home/domain/usecases/get_home_usecase.dart';
+import '../../features/home/domain/usecases/get_all_homes_usecase.dart';
+import '../../features/home/domain/usecases/update_home_usecase.dart';
+import '../../features/home/presentation/bloc/home_bloc.dart';
+import '../../features/home/domain/usecases/get_home_summary_usecase.dart';
+import '../../features/home/domain/usecases/get_health_alerts_usecase.dart';
+import '../../features/home/domain/usecases/get_upcoming_appointments_usecase.dart'
+    as home_usecases;
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -88,6 +102,8 @@ Future<void> initDependencies() async {
   _initProfileFeature();
 
   _initAppointmentsFeature();
+
+  _initHomeFeature();
 }
 
 /// Initialize external dependencies
@@ -282,6 +298,65 @@ mixin ServiceLocatorMixin {
 
 // ==================== END OF FEATURE ====================
 
+/// Initialize Home feature
+void _initHomeFeature() {
+  // ========== BLoC ==========
+  sl.registerFactory<HomeBloc>(
+    () => HomeBloc(
+      getUpcomingAppointmentsUseCase: sl(),
+      getHealthAlertsUseCase: sl(),
+      getHomeSummaryUseCase: sl(),
+      getHomeUseCase: sl(),
+      getAllHomesUseCase: sl(),
+      createHomeUseCase: sl(),
+      updateHomeUseCase: sl(),
+      deleteHomeUseCase: sl(),
+    ),
+  );
+
+  // ========== Use Cases ==========
+  sl.registerLazySingleton<GetHealthAlertsUseCase>(
+    () => GetHealthAlertsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<home_usecases.GetUpcomingAppointmentsUseCase>(
+    () => home_usecases.GetUpcomingAppointmentsUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetHomeSummaryUseCase>(
+    () => GetHomeSummaryUseCase(sl()),
+  );
+
+  sl.registerLazySingleton<GetHomeUseCase>(() => GetHomeUseCase(sl()));
+
+  sl.registerLazySingleton<GetAllHomesUseCase>(() => GetAllHomesUseCase(sl()));
+
+  sl.registerLazySingleton<CreateHomeUseCase>(() => CreateHomeUseCase(sl()));
+
+  sl.registerLazySingleton<UpdateHomeUseCase>(() => UpdateHomeUseCase(sl()));
+
+  sl.registerLazySingleton<DeleteHomeUseCase>(() => DeleteHomeUseCase(sl()));
+
+  // ========== Repository ==========
+  sl.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // ========== Data Sources ==========
+  sl.registerLazySingleton<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(sl()),
+  );
+
+  sl.registerLazySingleton<HomeLocalDataSource>(
+    () => HomeLocalDataSourceImpl(sl()),
+  );
+}
+
+// ==================== END OF Home FEATURE ====================
 
 /// Initialize Appointments feature
 void _initAppointmentsFeature() {
@@ -353,9 +428,7 @@ void _initAppointmentsFeature() {
     () => GetDoctorDetailUseCase(sl()),
   );
 
-  sl.registerLazySingleton<GetDoctorsUseCase>(
-    () => GetDoctorsUseCase(sl()),
-  );
+  sl.registerLazySingleton<GetDoctorsUseCase>(() => GetDoctorsUseCase(sl()));
 
   sl.registerLazySingleton<GetAppointmentsUseCase>(
     () => GetAppointmentsUseCase(sl()),
@@ -397,4 +470,3 @@ void _initAppointmentsFeature() {
 }
 
 // ==================== END OF Appointments FEATURE ====================
-

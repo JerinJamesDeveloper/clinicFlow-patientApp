@@ -56,3 +56,51 @@ flutter analyze
 Current analyzer status after appointments integration:
 - Appointments generation errors are resolved.
 - One unrelated existing project error remains in `test/widget_test.dart` (`App` type reference).
+
+## Home Feature Status
+
+Home page and feature scaffolding are completed via CLI generation and manual page rewrite.
+
+### Feature command used
+
+```bash
+embit feature -n home --nav-bar --icon Icons.home_outlined --label "Home"
+```
+
+### Models generated (from `creator.md`)
+
+```bash
+embit model -f home -n home_summary --with-state
+embit model -f home -n appointment_preview --string appointmentId --string doctorName --string departmentName --string hospitalBranch --string appointmentDate --string slotTime --string status --int tokenNumber
+embit model -f home -n health_alert --string title --string message --string alertType --string priority
+```
+
+Note:
+- Installed CLI `v0.9.2` does not accept `--with-state` without fields, so `home_summary` was generated with a compatible fallback field:
+  `embit model -f home -n home_summary --string summaryTitle`
+
+### Usecases generated (from `creator.md`)
+
+```bash
+embit usecase -f home -n get_home_summary -t get --with-event
+embit usecase -f home -n get_health_alerts -t get-list --with-event
+embit usecase -f home -n get_upcoming_appointments -t get-list --with-event
+```
+
+### Routing and page wiring
+
+- Route path wired to page: `/home -> HomePage`
+- Replaced placeholder home route in router with feature page.
+- Rewrote home page UI into a dashboard-style implementation with stats, quick actions, and recent items.
+
+### Verification run
+
+```bash
+flutter pub get
+flutter analyze
+```
+
+Current analyzer status after home integration:
+- Home generation errors are resolved.
+- Existing project-wide warning set remains.
+- One unrelated existing project error remains in `test/widget_test.dart` (`App` type reference).

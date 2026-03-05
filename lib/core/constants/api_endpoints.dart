@@ -80,4 +80,12 @@ class ApiEndpoints {
   static const String createappointmentss = '$appointmentsBase/create';
   static const String deleteappointmentss = '$appointmentsBase/delete';
   static const String updateappointmentss = '$appointmentsBase/update';
+  // ================= Home ============================
+  static const String homeBase = '$baseUrl/homes';
+  static const String homes = homeBase;
+  static const String gethomes = '$homeBase/get';
+  static const String getallhomes = '$homeBase/getall';
+  static const String createhomes = '$homeBase/create';
+  static const String deletehomes = '$homeBase/delete';
+  static const String updatehomes = '$homeBase/update';
 }
